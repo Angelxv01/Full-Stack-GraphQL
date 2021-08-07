@@ -1,0 +1,27 @@
+{
+  "name": "library",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Angelxv01/Full-Stack-GraphQL.git"
+  },
+  "author": "Angelxv01",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Angelxv01/Full-Stack-GraphQL/issues"
+  },
+  "homepage": "https://github.com/Angelxv01/Full-Stack-GraphQL#readme",
+  "dependencies": {
+    "apollo-server": "^3.1.2",
+    "graphql": "^15.5.1"
+  },
+  "type": "commonjs",
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
+}

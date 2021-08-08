@@ -1,32 +1,38 @@
-import { useMutation } from '@apollo/client'
+import { useMutation, useQuery } from '@apollo/client'
 import React, { useState } from 'react'
 import { ALL_AUTHORS, EDIT_AUTHOR } from '../queries'
 
 const BirthForm = () => {
-  const [author, setAuthor] = useState('')
+  const res = useQuery(ALL_AUTHORS).data.allAuthors
+  const defaultSelect = res[0].name
+  const [author, setAuthor] = useState(defaultSelect)
   const [year, setYear] = useState('')
   const [editAuthor] = useMutation(EDIT_AUTHOR, {
-    refetchQueries: [{ query: ALL_AUTHORS }]
+    refetchQueries: [{ query: ALL_AUTHORS }],
+    onError: (err) => console.log(err.graphQLErrors[0].message)
   })
-
   const handleSubmit = (e) => {
     e.preventDefault()
-
     editAuthor({ variables: { author, year: Number(year) } })
 
-    setAuthor('')
+    setAuthor(defaultSelect)
     setYear('')
   }
 
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        author
-        <input
+        author:
+        <select
           value={author}
           onChange={({ target }) => setAuthor(target.value)}
-          type="text"
-        />
+        >
+          {res.map((obj) => (
+            <option value={obj.name} key={obj.name}>
+              {obj.name}
+            </option>
+          ))}
+        </select>
       </div>
       <div>
         year

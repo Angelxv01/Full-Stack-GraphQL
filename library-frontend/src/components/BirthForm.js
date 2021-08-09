@@ -4,8 +4,8 @@ import { ALL_AUTHORS, EDIT_AUTHOR } from '../queries'
 
 const BirthForm = () => {
   const res = useQuery(ALL_AUTHORS).data.allAuthors
-  const defaultSelect = res[0].name
-  const [author, setAuthor] = useState(defaultSelect)
+  const defaultSelect = res[0] || { name: '' }
+  const [author, setAuthor] = useState(defaultSelect.name)
   const [year, setYear] = useState('')
   const [editAuthor] = useMutation(EDIT_AUTHOR, {
     refetchQueries: [{ query: ALL_AUTHORS }],

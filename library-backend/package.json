@@ -18,7 +18,10 @@
   "homepage": "https://github.com/Angelxv01/Full-Stack-GraphQL#readme",
   "dependencies": {
     "apollo-server": "^3.1.2",
-    "graphql": "^15.5.1"
+    "dotenv": "^10.0.0",
+    "graphql": "^15.5.1",
+    "mongoose": "^5.13.5",
+    "mongoose-unique-validator": "^2.0.3"
   },
   "type": "commonjs",
   "devDependencies": {

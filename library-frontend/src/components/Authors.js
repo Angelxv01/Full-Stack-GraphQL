@@ -5,10 +5,10 @@ import BirthForm from './BirthForm'
 
 const Authors = (props) => {
   const res = useQuery(ALL_AUTHORS)
-  if (!props.show) {
+  if (!props.show || res.loading) {
     return null
   }
-  if (res.loading) return null
+
   const authors = res.data.allAuthors
 
   return (

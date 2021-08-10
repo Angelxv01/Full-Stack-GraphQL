@@ -5,14 +5,7 @@ import { LOGIN } from '../queries'
 const Login = ({ show, setToken }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-
   const [login, result] = useMutation(LOGIN)
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-
-    login({ variables: { username, password } })
-  }
 
   useEffect(() => {
     if (result.data) {
@@ -20,18 +13,26 @@ const Login = ({ show, setToken }) => {
       setToken(token)
       localStorage.setItem('loggedUser', token)
     }
-  }, [result.data])
+  }, [result.data, setToken])
 
   useEffect(() => {
     const token = localStorage.getItem('loggedUser')
     if (token) {
       setToken(token)
     }
-  }, [])
+  }, [setToken])
 
-  const visibile = { display: show ? '' : 'none' }
+  if (!show) {
+    return null
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    login({ variables: { username, password } })
+  }
+
   return (
-    <form style={visibile} onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit}>
       <div>
         username
         <input

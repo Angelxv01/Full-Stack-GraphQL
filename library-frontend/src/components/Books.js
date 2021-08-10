@@ -1,25 +1,37 @@
-import { useQuery } from '@apollo/client'
-import React, { useState } from 'react'
+import { useLazyQuery, useQuery } from '@apollo/client'
+import React, { useState, useEffect } from 'react'
 import { ALL_BOOKS } from '../queries'
 
 const Books = (props) => {
-  const res = useQuery(ALL_BOOKS)
-  const [filter, setFilter] = useState('')
-  if (!props.show) {
-    return null
+  // use this only once to mantain the state of genres
+  const allBooks = useQuery(ALL_BOOKS)
+  const [genre, setGenre] = useState([])
+
+  const [show, setShow] = useState([])
+  const [getBooks, books] = useLazyQuery(ALL_BOOKS)
+
+  const showBooks = (name) => {
+    getBooks({ variables: { genre: name } })
   }
 
-  if (res.loading) {
+  useEffect(() => {
+    if (allBooks.data) {
+      const genres = allBooks.data.allBooks
+        .reduce((acc, obj) => [...acc, ...obj.genres], [])
+        .filter((obj, i, arr) => arr.indexOf(obj) === i)
+      setGenre(genres)
+    }
+  }, [allBooks])
+
+  useEffect(() => {
+    if (books.data) {
+      setShow(books.data.allBooks)
+    }
+  }, [books])
+
+  if (books.loading || !props.show) {
     return null
   }
-
-  const books = res.data.allBooks
-  const filteredBooks = filter
-    ? books.filter((obj) => obj.genres.indexOf(filter) !== -1)
-    : books
-  const genres = books
-    .reduce((acc, obj) => [...acc, ...obj.genres], [])
-    .filter((obj, i, arr) => arr.indexOf(obj) === i)
 
   return (
     <div>
@@ -32,7 +44,7 @@ const Books = (props) => {
             <th>author</th>
             <th>published</th>
           </tr>
-          {filteredBooks.map((a) => (
+          {show.map((a) => (
             <tr key={a.title}>
               <td>{a.title}</td>
               <td>{a.author.name}</td>
@@ -41,14 +53,12 @@ const Books = (props) => {
           ))}
         </tbody>
       </table>
-      <select value={filter} onChange={({ target }) => setFilter(target.value)}>
-        <option value="">Select an option</option>
-        {genres.map((obj) => (
-          <option value={obj} key={obj}>
-            {obj}
-          </option>
-        ))}
-      </select>
+
+      {genre.map((obj) => (
+        <button onClick={({ target }) => showBooks(obj)} key={obj}>
+          {obj}
+        </button>
+      ))}
     </div>
   )
 }

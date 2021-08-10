@@ -1,17 +1,21 @@
-import { useMutation } from '@apollo/client'
+import { useLazyQuery, useMutation } from '@apollo/client'
 import React, { useEffect, useState } from 'react'
-import { LOGIN } from '../queries'
+import { LOGIN, ME } from '../queries'
 
 const Login = ({ show, setToken }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [login, result] = useMutation(LOGIN)
+  const [getMe, _] = useLazyQuery(ME, {
+    fetchPolicy: 'network-only'
+  })
 
   useEffect(() => {
     if (result.data) {
       const token = result.data.login.value
       setToken(token)
       localStorage.setItem('loggedUser', token)
+      getMe()
     }
   }, [result.data, setToken])
 

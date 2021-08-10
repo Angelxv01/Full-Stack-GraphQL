@@ -15,7 +15,7 @@ const BirthForm = () => {
     e.preventDefault()
     editAuthor({ variables: { author, year: Number(year) } })
 
-    setAuthor(defaultSelect)
+    setAuthor(defaultSelect.name)
     setYear('')
   }
 

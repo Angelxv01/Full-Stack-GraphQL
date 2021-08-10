@@ -22,6 +22,13 @@ const Login = ({ show, setToken }) => {
     }
   }, [result.data])
 
+  useEffect(() => {
+    const token = localStorage.getItem('loggedUser')
+    if (token) {
+      setToken(token)
+    }
+  }, [])
+
   const visibile = { display: show ? '' : 'none' }
   return (
     <form style={visibile} onSubmit={handleSubmit}>

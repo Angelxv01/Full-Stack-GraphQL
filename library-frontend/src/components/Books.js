@@ -21,7 +21,7 @@ const Books = (props) => {
         .filter((obj, i, arr) => arr.indexOf(obj) === i)
       setGenre(genres)
     }
-  }, [allBooks])
+  }, [allBooks.data])
 
   useEffect(() => {
     if (books.data) {
@@ -55,7 +55,7 @@ const Books = (props) => {
       </table>
 
       {genre.map((obj) => (
-        <button onClick={({ target }) => showBooks(obj)} key={obj}>
+        <button onClick={() => showBooks(obj)} key={obj}>
           {obj}
         </button>
       ))}
